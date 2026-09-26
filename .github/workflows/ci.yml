@@ -1,18 +1,31 @@
 name: Python CI
 
-on: [push] # Запуск проверки начинается при любой отправке кода
+on: [push] # Пайплайн запускается автоматически при любой отправке кода
 
 jobs:
-  check-project:
-    runs-on: ubuntu-latest # Проверка в облаке GitHub
+  build-and-test:
+    runs-on: ubuntu-latest # Выделение виртуальной машины в облаке GitHub
 
     steps:
-    - uses: actions/checkout@v4 # GitHub скачивает файлы проекта
+    - name: 1. Скачивание исходного кода
+      uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5 # GitHub запускает Python 3.10
+    - name: 2. Настройка окружения Python
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    - name: Run script test
-      run: python src/main.py # Проверка файла, запуск должен проходить без ошибок
+    - name: 3. Установка зависимостей (П1)
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pytest # Установка линтера и инструмента для тестов
+
+    - name: 4. Линтинг кода с помощью flake8 (П2)
+      run: |
+        # Проверка файла main.py на критические синтаксические ошибки
+        flake8 src/main.py --count --select=E9,F63,F7,F82 --show-source --statistics
+
+    - name: 5. Запуск тестов (П3)
+      run: |
+        # Запуск pytest. Флаг --allow-empty нужен, так как тесты пока пустые
+        pytest --allow-empty
