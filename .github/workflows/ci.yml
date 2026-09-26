@@ -22,8 +22,8 @@ jobs:
 
     - name: 4. Линтинг кода с помощью flake8 (П2)
       run: |
-        # Проверка файла main.py на критические синтаксические ошибки
-        flake8 src/main.py --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Проверяем весь репозиторий на критические синтаксические ошибки
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
     - name: 5. Запуск тестов (П3)
       run: |
