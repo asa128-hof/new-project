@@ -1,0 +1,18 @@
+name: Python CI
+
+on: [push] # Запуск проверки начинается при любой отправке кода
+
+jobs:
+  check-project:
+    runs-on: ubuntu-latest # Проверка в облаке GitHub
+
+    steps:
+    - uses: actions/checkout@v4 # GitHub скачивает файлы проекта
+
+    - name: Set up Python
+      uses: actions/setup-python@v5 # GitHub запускает Python 3.10
+      with:
+        python-version: '3.10'
+
+    - name: Run script test
+      run: python src/main.py # Проверка файла, запуск должен проходить без ошибок
