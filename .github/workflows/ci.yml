@@ -1,13 +1,13 @@
 name: Python CI
 
-on: [push] # Пайплайн запускается автоматически при любой отправке кода
+on: [push] # Автоматический запуск при любой отправке кода
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest # Выделение виртуальной машины в облаке GitHub
 
     steps:
-    - name: 1. Скачивание исходного кода
+    - name: 1. Скачивание исходного кода проекта
       uses: actions/checkout@v4
 
     - name: 2. Настройка окружения Python
@@ -15,17 +15,17 @@ jobs:
       with:
         python-version: '3.10'
 
-    - name: 3. Установка зависимостей (П1)
+    - name: 3. Установка зависимостей (Пункт 1 методички)
       run: |
         python -m pip install --upgrade pip
-        pip install flake8 pytest # Установка линтера и инструмента для тестов
+        pip install flake8 pytest # Ставим линтер и тесты
 
-    - name: 4. Линтинг кода с помощью flake8 (П2)
+    - name: 4. Линтинг кода с помощью flake8 (Пункт 2 методички)
       run: |
-        # Проверяем весь репозиторий на критические синтаксические ошибки
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Указываем папку src/, чтобы flake8 проверял только код программы
+        flake8 src/ --count --select=E9,F63,F7,F82 --show-source --statistics
 
-    - name: 5. Запуск тестов (П3)
+    - name: 5. Запуск тестов проекта (Пункт 3 методички)
       run: |
-        # Запуск pytest. Флаг --allow-empty нужен, так как тесты пока пустые
+        # Запуск pytest. Флаг --allow-empty нужен, так как папка тестов пустая
         pytest --allow-empty
