@@ -25,11 +25,10 @@ jobs:
 
     - name: Lint with flake8
       run: |
-        # Проверка синтаксических ошибок и стиля кода
-        flake8 src/ --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 src/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+        flake8 src/ tests/ --max-line-length=120 --per-file-ignores="tests/*.py:E402"
 
-    - name: Run Integration Tests with Coverage
+    - name: Run Unit and Integration Tests with Coverage
+      env:
+        PYTHONPATH: src
       run: |
-        # Запуск тестов с генерацией отчета о покрытии кода (coverage)
-        pytest tests/ --doctest-modules --junitxml=junit/test-results.xml --cov=src --cov-report=term-missing
+        python -m pytest tests/ -v --cov=src --cov-report=term-missing --cov-fail-under=70
