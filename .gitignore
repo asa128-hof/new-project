@@ -5,3 +5,8 @@ dist/
 .env
 venv/
 __pycache__/
+
+.coverage
+archive/
+*.json
+*.bin
